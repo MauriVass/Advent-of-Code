@@ -1,15 +1,21 @@
-def MoveCrates(ship, index, from_stack, to_stack):
+def MoveCrates(ship, index, from_stack, to_stack, pt1):
     crates_to_move = index
-    for _ in range(crates_to_move):
-        crate = ship[from_stack].pop()
-        ship[to_stack].append(crate)
+    if(pt1==True):
+        for _ in range(crates_to_move):
+            crate = ship[from_stack].pop()
+            ship[to_stack].append(crate)
+    else:
+        tmp = ship[from_stack][-index:]
+        ship[from_stack] = ship[from_stack][:-index]
+        [ship[to_stack].append(t) for t in tmp]
+
 
 f = open('input.txt')
 # f = open('example.txt')
-# pt1 = True
+pt1 = True
 
 ship = {}
-num_crates = 9
+num_crates = 9 #3 for example.txt
 for i in range(num_crates):
     ship[i + 1] = []
 crates_allocation = True
@@ -28,11 +34,11 @@ for line in f.readlines():
         from_stack = int(elements[3])
         to_stack = int(elements[5])
 
-        MoveCrates(ship, index_crate, from_stack, to_stack)
+        MoveCrates(ship, index_crate, from_stack, to_stack, pt1)
 
 message = ''
 for index_crate in range(num_crates):
     message += ship[index_crate+1][-1]
-print(message) #pt1 SBPQRSCDF
+print(message) #pt1 SBPQRSCDF pt2 RGLVRCQSB
 f.close()
 
