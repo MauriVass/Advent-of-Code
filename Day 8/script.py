@@ -18,10 +18,8 @@ class Tree:
 
 f = open('input.txt')
 # f = open('example.txt')
-pt1 = False
 
 forest = []
-
 row = 0
 for line in f.readlines():
     tmp = []
@@ -78,6 +76,58 @@ for r in range(1,row-1):
                 visible += 1
 print(visible) #pt1 1711
 
+max_scenic_score = 0
+for r in range(1,row-1):
+    for c in range(1,row-1):
+        tree = forest[r][c]
+        scenic_score = 1
+
+        #from top
+        numb_tree = 0
+        for top in range(0,r):
+            h = forest[r-1-top][c].height
+            numb_tree += 1
+            if (h >= tree.height):
+                break
+        if(numb_tree>0):
+            scenic_score *= numb_tree
+
+        #from right
+        numb_tree = 0
+        for right in range(c+1,row):
+            h = forest[r][right].height
+            numb_tree += 1
+            if (h >= tree.height):
+                break
+        if(numb_tree>0):
+            scenic_score *= numb_tree
+
+        #from bottom
+        numb_tree = 0
+        for bottom in range(r+1,row):
+            h = forest[bottom][c].height
+            numb_tree += 1
+            if (h >= tree.height):
+                break
+        if(numb_tree>0):
+            scenic_score *= numb_tree
+
+        #from left
+        numb_tree = 0
+        for left in range(0,c):
+            h = forest[r][c-1-left].height
+            numb_tree += 1
+            if (h >= tree.height):
+                break
+        if(numb_tree>0):
+            scenic_score *= numb_tree
+        #
+        # if(tree.height==5):
+        #     print(tree.height, scenic_score)
+        if(scenic_score > max_scenic_score):
+            max_scenic_score = scenic_score
+
+print(max_scenic_score) #pt2 301392
 
 
 
