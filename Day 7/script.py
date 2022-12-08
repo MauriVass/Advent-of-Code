@@ -30,10 +30,10 @@ class Node():
         for c in self.children:
             s = c.calculateSize()
             children_size += s
-        s = current_size + children_size
-        if (s < 100000):
-            sizes[self.name] = s
-        return s
+        total_size = current_size + children_size
+        name = self.parent.name+self.name if self.parent != None else self.name
+        sizes[name] = total_size
+        return total_size
 
 f = open('input.txt')
 # f = open('example.txt')
@@ -58,15 +58,27 @@ for line in f.readlines():
         # else: # ls. No need to do anything actually
     else:
         file = line.split(' ')
-        if(file[0] == 'dir'):
-            _ = 1 #do nothing
-        else:
+        if(file[0] != 'dir'):
             current_directory.addFile(file[-1], int(file[0]))
 
 root.calculateSize()
 size = 0
 for s in sizes.values():
-    size+=s
+    if (s < 100000):
+        size += s
 print(size) #pt1 1611443
 f.close()
+
+available_space = 70000000
+required_space = 30000000
+delete_space = required_space - (available_space - sizes['/'])
+print('Space to be cleared:', delete_space)
+min_deletion = available_space #inf
+
+for v in sizes.values():
+    if(v > delete_space and v < min_deletion):
+        min_deletion = v
+print(min_deletion) #pt2 2086088
+
+
 
