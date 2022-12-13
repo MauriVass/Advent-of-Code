@@ -103,6 +103,6 @@ bubbleSort(all_elements)
 
 ind_of2 = all_elements.index([[2]]) + 1
 ind_of6 = all_elements.index([[6]]) + 1
-print(ind_of2 * ind_of6)
+print(ind_of2 * ind_of6) #pt2 24477
 
 
