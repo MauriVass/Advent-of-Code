@@ -27,42 +27,30 @@ def returnElement(line):
         counter+=1
     return elems, counter
 
-def checkElements(element1, element2):
-    right_order = True
-    counter = 0
-    while counter < len(element1) or counter < len(element2):
-        if (len(element1) > counter and len(element2) > counter):
-            val1 = element1[counter]
-            val2 = element2[counter]
-            right_order = checkValues(val1, val2)
-            if (right_order == False):
-                break
-        else:
-            if (counter >= len(element1)):
-                right_order = True
-            else:
-                right_order = False
-            break
-        counter += 1
-    return right_order
-
 def checkValues(val1, val2):
-    right_order = True
     if(type(val1) == int and type(val2) == int): #both integers
-        right_order = val1 <= val2 #check numerical values
+        if(val1 < val2): #check numerical values
+            return 1
+        if(val1 > val2):
+            return -1
+        return 0
+
     elif(type(val1)==int): #val2 is a list
-        if(len(val2)>0):
-            right_order = checkValues(val1, val2[0])
-        else:
-            return True
+        return checkValues([val1], val2)
     elif(type(val2)==int): #same but this time val1 is a list
-        if (len(val1) > 0):
-            right_order = checkValues(val1[0], val2)
-        else:
-            return False
+        return checkValues(val1, [val2])
     else: #both lists
-        right_order = checkElements(val1, val2)
-    return right_order
+        counter = 0
+        while counter < len(val1) and counter < len(val2):
+            right_order = checkValues(val1[counter], val2[counter])
+            if (right_order != 0):
+                return right_order
+            counter += 1
+        if (len(val1) < len(val2)):
+            return 1
+        elif (len(val1) > len(val2)):
+            return -1
+    return 0
 
 f = open('input.txt')
 # f = open('example.txt')
@@ -72,24 +60,49 @@ elements = {}
 counter_line = 0
 counter_groups = 1
 result = 0
-for line in f.readlines():
+all_elements = []
+for line in f.readlines()+['[.]\n']:
     line = line[1:-2] #remove initial [, final ] and final \n
     if(counter_line<2):
-        elements[counter_line], _ = returnElement(line)
+        ele, _ = returnElement(line)
+        elements[counter_line] = ele
+        all_elements.append(ele)
         counter_line += 1
     else:
         e1 = elements[0]
         e2 = elements[1]
-        right_order = checkElements(e1, e2)
-        if(right_order):
+        right_order = checkValues(e1, e2)
+        if(right_order==1):
             result += counter_groups
-            # print(elements[0])
-            # print(elements[1])
-            # print()
         counter_groups += 1
         counter_line = 0
 
 f.close()
 
-print(result)
+print(result) #pt1 5825
+
+# Python program for implementation of Bubble Sort
+
+
+def bubbleSort(arr):
+    n = len(arr)
+    # Traverse through all array elements
+    for i in range(n):
+        # Last i elements are already in place
+        for j in range(0, n-i-1):
+            # traverse the array from 0 to n-i-1
+            # Swap if the element found is greater
+            # than the next element
+            if checkValues(arr[j], arr[j+1]) == -1:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+
+all_elements.append([[2]])
+all_elements.append([[6]])
+
+bubbleSort(all_elements)
+
+ind_of2 = all_elements.index([[2]]) + 1
+ind_of6 = all_elements.index([[6]]) + 1
+print(ind_of2 * ind_of6)
+
 
